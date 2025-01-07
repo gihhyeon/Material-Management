@@ -23,6 +23,13 @@ def log_data():
             messagebox.showerror("Error", "L/N must be exactly 8 characters!")
             return
         
+        # Validate date format (YYYY-MM-DD)
+        try:
+            input_date = datetime.strptime(date_entry.get(), "%Y-%m-%d").date()
+        except ValueError:
+            messagebox.showerror("Error", "Invalid date format! Please use YYYY-MM-DD.")
+            return
+        
          # MySQL 연결 시작 시간 기록
         start_time = time.time()
 
@@ -39,7 +46,7 @@ def log_data():
         worker = worker_entry.get()
         solder_lot = solder_lot_entry.get()
         material = material_entry.get()
-        input_date_str = date_entry.get()  # Get the date input as string
+        input_date = date_entry.get()  # Get the date input as string
         pn = pn_entry.get()
         ln = ln_entry.get()
         qty = int(qty_entry.get())  # Convert QTY to integer
@@ -47,10 +54,10 @@ def log_data():
 
         # Insert data into MySQL table
         insert_query = """
-        INSERT INTO test (작업자, 입출고, 자재종류, pn, ln, 수량, 입력시간)
-        VALUES (%s, %s, %s, %s, %s, %s, NOW())
+        INSERT INTO test (작업자, 입출고, 자재종류, 날짜, pn, ln, 수량, 입력시간)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
         """
-        cursor.execute(insert_query, (worker, solder_lot, material, pn, ln, qty))
+        cursor.execute(insert_query, (worker, solder_lot, material, input_date, pn, ln, qty))
         db_connection.commit()  # Commit the transaction
 
         # 데이터 저장 완료 시간 기록
@@ -100,27 +107,27 @@ root.geometry("1050x600")  # Increase window size to accommodate larger elements
 
 # Worker entry
 tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=50, y=30)
-worker_entry = tk.Entry(root, width=15, font=("Helvetica",20))
-worker_entry.place(x=200, y=30)
-worker_entry.bind("<Return>", focus_next)  # Bind Enter key
+solder_lot_entry = tk.Entry(root, width=15, font=("Helvetica",20))
+solder_lot_entry.place(x=200, y=30)
+solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Solder lot No entry
 tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=50, y=90)
-solder_lot_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-solder_lot_entry.place(x=200, y=95)
-solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
+material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
+material_entry.place(x=200, y=95)
+material_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Material entry
 tk.Label(root, font=("Helvetica", 20), text="날짜:").place(x=50, y=140)
-material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-material_entry.place(x=200, y=140)
-material_entry.bind("<Return>", focus_next)  # Bind Enter key
+date_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
+date_entry.place(x=200, y=140)
+date_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # New entries: Date, P/N, L/N, QTY
 tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=90, y=300)
-date_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-date_entry.place(x=200, y=300)
-date_entry.bind("<Return>", focus_next)  # Bind Enter key
+worker_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
+worker_entry.place(x=200, y=300)
+worker_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # New entries: P/N, L/N, QTY, positioned below "No file selected" label
 tk.Label(root, font=("Helvetica", 20), text="P/N:").place(x=120, y=350)
