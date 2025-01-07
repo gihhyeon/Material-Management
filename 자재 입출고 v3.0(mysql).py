@@ -14,7 +14,7 @@ def log_data():
         return
 
     try:
-        
+
          # Validate P/N and L/N length
         if len(pn_entry.get()) != 29:
             messagebox.showerror("Error", "P/N must be exactly 29 characters!")
@@ -39,6 +39,7 @@ def log_data():
         worker = worker_entry.get()
         solder_lot = solder_lot_entry.get()
         material = material_entry.get()
+        input_date_str = date_entry.get()  # Get the date input as string
         pn = pn_entry.get()
         ln = ln_entry.get()
         qty = int(qty_entry.get())  # Convert QTY to integer
@@ -98,22 +99,28 @@ root.title("자재 입출고")
 root.geometry("1050x600")  # Increase window size to accommodate larger elements
 
 # Worker entry
-tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=50, y=30)
+tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=50, y=30)
 worker_entry = tk.Entry(root, width=15, font=("Helvetica",20))
 worker_entry.place(x=200, y=30)
 worker_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Solder lot No entry
-tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=50, y=90)
+tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=50, y=90)
 solder_lot_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 solder_lot_entry.place(x=200, y=95)
 solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Material entry
-tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=50, y=140)
+tk.Label(root, font=("Helvetica", 20), text="날짜:").place(x=50, y=140)
 material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 material_entry.place(x=200, y=140)
 material_entry.bind("<Return>", focus_next)  # Bind Enter key
+
+# New entries: Date, P/N, L/N, QTY
+tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=90, y=300)
+date_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
+date_entry.place(x=200, y=300)
+date_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # New entries: P/N, L/N, QTY, positioned below "No file selected" label
 tk.Label(root, font=("Helvetica", 20), text="P/N:").place(x=120, y=350)
@@ -139,6 +146,7 @@ enter_button.place(x=475, y=520)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(worker_entry)).place(x=440, y=30)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(solder_lot_entry)).place(x=440, y=90)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(material_entry)).place(x=440, y=140)
+tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(date_entry)).place(x=440, y=300)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(pn_entry)).place(x=440, y=350)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(ln_entry)).place(x=440, y=400)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(qty_entry)).place(x=440, y=450)
