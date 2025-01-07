@@ -14,6 +14,15 @@ def log_data():
         return
 
     try:
+        
+         # Validate P/N and L/N length
+        if len(pn_entry.get()) != 29:
+            messagebox.showerror("Error", "P/N must be exactly 29 characters!")
+            return
+        if len(ln_entry.get()) != 8:
+            messagebox.showerror("Error", "L/N must be exactly 8 characters!")
+            return
+        
          # MySQL 연결 시작 시간 기록
         start_time = time.time()
 
