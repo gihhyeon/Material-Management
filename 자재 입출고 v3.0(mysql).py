@@ -9,24 +9,24 @@ import time
 # Function to log data into MySQL database
 def log_data():
     if not worker_entry.get() or not solder_lot_entry.get() or not material_entry.get() or not pn_entry.get() or not ln_entry.get() or not qty_entry.get():
-        messagebox.showerror("Error", "All fields must be filled!")
+        messagebox.showerror("Error", "모든 필드가 채워져야 합니다.")
         return
 
     try:
 
         # Validate P/N and L/N length
         if len(pn_entry.get()) != 29:
-            messagebox.showerror("Error", "P/N must be exactly 29 characters!")
+            messagebox.showerror("Error", "P/N은 29자리를 입력해야 됩니다.")
             return
         if len(ln_entry.get()) != 8:
-            messagebox.showerror("Error", "L/N must be exactly 8 characters!")
+            messagebox.showerror("Error", "L/N은 8자리를 입력해야 됩니다.")
             return
         
         # Validate date format (YYYY-MM-DD)
         try:
             input_date = datetime.strptime(date_entry.get(), "%Y-%m-%d").date()
         except ValueError:
-            messagebox.showerror("Error", "Invalid date format! Please use YYYY-MM-DD.")
+            messagebox.showerror("Error", "올바른 형식이 아닙니다. Please use YYYY-MM-DD.")
             return
         
         # MySQL 연결 시작 시간 기록
@@ -71,7 +71,7 @@ def log_data():
 
         messagebox.showinfo("Success", f"Data logged successfully! (소요 시간: {elapsed_time:.4f}초)")
 
-        messagebox.showinfo("Success", "Data logged successfully!")
+        messagebox.showinfo("Success", "데이터 입력 성공")
 
         # Clear inputs for P/N, L/N, QTY after successful log
         worker_entry.delete(0, tk.END)
