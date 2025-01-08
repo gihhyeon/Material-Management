@@ -1,8 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import messagebox
 from datetime import datetime
 import mysql.connector
-import os
 import config # config.py 파일 임포트
 import time
 
@@ -15,7 +14,7 @@ def log_data():
 
     try:
 
-         # Validate P/N and L/N length
+        # Validate P/N and L/N length
         if len(pn_entry.get()) != 29:
             messagebox.showerror("Error", "P/N must be exactly 29 characters!")
             return
@@ -30,10 +29,10 @@ def log_data():
             messagebox.showerror("Error", "Invalid date format! Please use YYYY-MM-DD.")
             return
         
-         # MySQL 연결 시작 시간 기록
+        # MySQL 연결 시작 시간 기록
         start_time = time.time()
 
-         # Use values from the config.py file for MySQL connection
+        # Use values from the config.py file for MySQL connection
         db_connection = mysql.connector.connect(
             host=config.MYSQL_HOST,  # MySQL 서버 주소
             user=config.MYSQL_USER,  # MySQL 사용자명
@@ -75,12 +74,14 @@ def log_data():
         messagebox.showinfo("Success", "Data logged successfully!")
 
         # Clear inputs for P/N, L/N, QTY after successful log
+        worker_entry.delete(0, tk.END)
         pn_entry.delete(0, tk.END)
         ln_entry.delete(0, tk.END)
         qty_entry.delete(0, tk.END)
 
         # Focus the P/N entry box for the next input
-        pn_entry.focus()
+        #pn_entry.focus()
+        worker_entry.focus()
 
         # Close the cursor and connection
         cursor.close()
