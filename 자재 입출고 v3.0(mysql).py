@@ -66,7 +66,7 @@ def log_data():
         elapsed_time = end_time - start_time
 
         # Update the log box with the new entry
-        log_box.insert(tk.END, f"작업자: {worker}\n입/출고: {solder_lot}\n자재 종류: {material}\nP/N: {pn}\nL/N: {ln}\nQTY: {qty}\n입력 시간: {input_time}\n\n")
+        log_box.insert(tk.END, f"작업자: {worker}\n입/출고: {solder_lot}\n자재 종류: {material}\nPCB 바코드: {pn}\n제품 바코드: {ln}\nQTY: {qty}\n입력 시간: {input_time}\n\n")
         log_box.yview(tk.END)  # Scroll to the end of the log box
 
         messagebox.showinfo("Success", f"Data logged successfully! (소요 시간: {elapsed_time:.4f}초)")
@@ -106,40 +106,40 @@ root.title("자재 입출고")
 root.geometry("1050x600")  # Increase window size to accommodate larger elements
 
 # Solder_lot entry
-tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=50, y=30)
+tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=85, y=30)
 solder_lot_entry = tk.Entry(root, width=15, font=("Helvetica",20))
 solder_lot_entry.place(x=200, y=30)
 solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Material entry
-tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=50, y=90)
+tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=120, y=90)
 material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 material_entry.place(x=200, y=95)
 material_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Input_date entry
-tk.Label(root, font=("Helvetica", 20), text="날짜:").place(x=50, y=140)
+tk.Label(root, font=("Helvetica", 20), text="날짜:").place(x=120, y=140)
 date_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 date_entry.place(x=200, y=140)
 date_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Worker entry
-tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=90, y=300)
+tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=93, y=300)
 worker_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 worker_entry.place(x=200, y=300)
 worker_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="P/N:").place(x=120, y=350)
+tk.Label(root, font=("Helvetica", 20), text="PCB 바코드:").place(x=29, y=350)
 pn_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 pn_entry.place(x=200, y=350)
 pn_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="L/N:").place(x=120, y=400)
+tk.Label(root, font=("Helvetica", 20), text="제품 바코드:").place(x=29, y=400)
 ln_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 ln_entry.place(x=200, y=400)
 ln_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="QTY:").place(x=120, y=450)
+tk.Label(root, font=("Helvetica", 20), text="QTY:").place(x=117, y=450)
 qty_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 qty_entry.place(x=200, y=450)
 qty_entry.bind("<Return>", focus_next)  # Bind Enter key
