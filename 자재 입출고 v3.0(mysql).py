@@ -80,7 +80,6 @@ def log_data():
         qty_entry.delete(0, tk.END)
 
         # Focus the P/N entry box for the next input
-        #pn_entry.focus()
         worker_entry.focus()
 
         # Close the cursor and connection
@@ -106,31 +105,30 @@ root = tk.Tk()
 root.title("자재 입출고")
 root.geometry("1050x600")  # Increase window size to accommodate larger elements
 
-# Worker entry
+# Solder_lot entry
 tk.Label(root, font=("Helvetica", 20), text="입/출고:").place(x=50, y=30)
 solder_lot_entry = tk.Entry(root, width=15, font=("Helvetica",20))
 solder_lot_entry.place(x=200, y=30)
 solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-# Solder lot No entry
+# Material entry
 tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=50, y=90)
 material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 material_entry.place(x=200, y=95)
 material_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-# Material entry
+# Input_date entry
 tk.Label(root, font=("Helvetica", 20), text="날짜:").place(x=50, y=140)
 date_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 date_entry.place(x=200, y=140)
 date_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-# New entries: Date, P/N, L/N, QTY
+# Worker entry
 tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=90, y=300)
 worker_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 worker_entry.place(x=200, y=300)
 worker_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-# New entries: P/N, L/N, QTY, positioned below "No file selected" label
 tk.Label(root, font=("Helvetica", 20), text="P/N:").place(x=120, y=350)
 pn_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 pn_entry.place(x=200, y=350)
