@@ -26,7 +26,7 @@ def log_data():
         try:
             input_date = datetime.strptime(date_entry.get(), "%Y-%m-%d").date()
         except ValueError:
-            messagebox.showerror("Error", "올바른 형식이 아닙니다. Please use YYYY-MM-DD.")
+            messagebox.showerror("Error", "날짜는 YYYY-MM-DD 형식을 사용해주세요.")
             return
         
         # MySQL 연결 시작 시간 기록
