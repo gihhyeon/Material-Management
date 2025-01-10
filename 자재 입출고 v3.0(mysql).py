@@ -5,6 +5,14 @@ import mysql.connector
 import config # config.py 파일 임포트
 import time
 
+# Function to update the rank field based on PCB barcode input
+def update_rank(event=None):
+    pcb_barcode = pn_entry.get()
+    if len(pcb_barcode) >= 18:
+        rank_value = pcb_barcode[12:18]  # 13~18번째 문자 추출
+        rank_label_var.set(rank_value)
+    else:
+        rank_label_var.set("")
 
 # Function to log data into MySQL database
 def log_data():
@@ -16,10 +24,10 @@ def log_data():
 
         # Validate P/N and L/N length
         if len(pn_entry.get()) != 29:
-            messagebox.showerror("Error", "P/N은 29자리를 입력해야 됩니다.")
+            messagebox.showerror("Error", "PCB 바코드는 29자리를 입력해야 됩니다.")
             return
         if len(ln_entry.get()) != 8:
-            messagebox.showerror("Error", "L/N은 8자리를 입력해야 됩니다.")
+            messagebox.showerror("Error", "제품 바코드는 8자리를 입력해야 됩니다.")
             return
         
         # Validate date format (YYYY-MM-DD)
@@ -48,15 +56,16 @@ def log_data():
         input_date = date_entry.get()  # Get the date input as string
         pn = pn_entry.get()
         ln = ln_entry.get()
+        rank = rank_label_var.get()  # Get rank value
         qty = int(qty_entry.get())  # Convert QTY to integer
         input_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Insert data into MySQL table
         insert_query = """
-        INSERT INTO test (작업자, 입출고, 자재종류, 날짜, pn, ln, 수량, 입력시간)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
+        INSERT INTO test (입출고, 자재종류, 날짜, 작업자, pn, ln, 랭크, 수량, 입력시간)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
         """
-        cursor.execute(insert_query, (worker, solder_lot, material, input_date, pn, ln, qty))
+        cursor.execute(insert_query, (solder_lot, material, input_date, worker, pn, ln, rank, qty))
         db_connection.commit()  # Commit the transaction
 
         # 데이터 저장 완료 시간 기록
@@ -66,7 +75,7 @@ def log_data():
         elapsed_time = end_time - start_time
 
         # Update the log box with the new entry
-        log_box.insert(tk.END, f"작업자: {worker}\n입/출고: {solder_lot}\n자재 종류: {material}\nPCB 바코드: {pn}\n제품 바코드: {ln}\nQTY: {qty}\n입력 시간: {input_time}\n\n")
+        log_box.insert(tk.END, f"작업자: {worker}\n입/출고: {solder_lot}\n자재 종류: {material}\nPCB 바코드: {pn}\n제품 바코드: {ln}\n개수: {qty}\n입력 시간: {input_time}\n\n")
         log_box.yview(tk.END)  # Scroll to the end of the log box
 
         messagebox.showinfo("Success", f"Data logged successfully! (소요 시간: {elapsed_time:.4f}초)")
@@ -124,22 +133,29 @@ date_entry.place(x=200, y=140)
 date_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Worker entry
-tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=93, y=300)
+tk.Label(root, font=("Helvetica", 20), text="작업자:").place(x=93, y=250)
 worker_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-worker_entry.place(x=200, y=300)
+worker_entry.place(x=200, y=250)
 worker_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="PCB 바코드:").place(x=29, y=350)
+tk.Label(root, font=("Helvetica", 20), text="PCB 바코드:").place(x=29, y=300)
 pn_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-pn_entry.place(x=200, y=350)
+pn_entry.place(x=200, y=300)
+pn_entry.bind("<KeyRelease>", update_rank)  # 키 릴리스 이벤트 바인딩
 pn_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="제품 바코드:").place(x=29, y=400)
+tk.Label(root, font=("Helvetica", 20), text="제품 바코드:").place(x=29, y=350)
 ln_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
-ln_entry.place(x=200, y=400)
+ln_entry.place(x=200, y=350)
 ln_entry.bind("<Return>", focus_next)  # Bind Enter key
 
-tk.Label(root, font=("Helvetica", 20), text="QTY:").place(x=117, y=450)
+# 랭크 field
+tk.Label(root, font=("Helvetica", 20), text="랭크:").place(x=129, y=400)
+rank_label_var = tk.StringVar()
+rank_label = tk.Label(root, width=15, font=("Helvetica", 20), textvariable=rank_label_var, relief="sunken")
+rank_label.place(x=200, y=400)
+
+tk.Label(root, font=("Helvetica", 20), text="개수:").place(x=117, y=450)
 qty_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 qty_entry.place(x=200, y=450)
 qty_entry.bind("<Return>", focus_next)  # Bind Enter key
@@ -152,9 +168,9 @@ enter_button.place(x=475, y=520)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(solder_lot_entry)).place(x=440, y=30)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(material_entry)).place(x=440, y=90)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(date_entry)).place(x=440, y=140)
-tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(worker_entry)).place(x=440, y=300)
-tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(pn_entry)).place(x=440, y=350)
-tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(ln_entry)).place(x=440, y=400)
+tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(worker_entry)).place(x=440, y=250)
+tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(pn_entry)).place(x=440, y=300)
+tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(ln_entry)).place(x=440, y=350)
 tk.Button(root, text="삭제", font=("Helvetica", 15), command=lambda: clear_entry(qty_entry)).place(x=440, y=450)
 
 # Log box to display logged entries with a specific font size
