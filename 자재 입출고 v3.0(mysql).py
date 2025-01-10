@@ -75,7 +75,7 @@ def log_data():
         elapsed_time = end_time - start_time
 
         # Update the log box with the new entry
-        log_box.insert(tk.END, f"작업자: {worker}\n입/출고: {solder_lot}\n자재 종류: {material}\nPCB 바코드: {pn}\n제품 바코드: {ln}\n개수: {qty}\n입력 시간: {input_time}\n\n")
+        log_box.insert(tk.END, f"입/출고: {solder_lot}\n자재 종류: {material}\n날짜: {input_date}\n작업자: {worker}\nPCB 바코드: {pn}\n제품 바코드: {ln}\n개수: {qty}\n입력 시간: {input_time}\n\n")
         log_box.yview(tk.END)  # Scroll to the end of the log box
 
         messagebox.showinfo("Success", f"Data logged successfully! (소요 시간: {elapsed_time:.4f}초)")
@@ -121,7 +121,7 @@ solder_lot_entry.place(x=200, y=30)
 solder_lot_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # Material entry
-tk.Label(root, font=("Helvetica", 20), text="자재:").place(x=120, y=90)
+tk.Label(root, font=("Helvetica", 20), text="자재 종류:").place(x=59, y=90)
 material_entry = tk.Entry(root, width=15, font=("Helvetica", 20))
 material_entry.place(x=200, y=95)
 material_entry.bind("<Return>", focus_next)  # Bind Enter key
@@ -150,7 +150,7 @@ ln_entry.place(x=200, y=350)
 ln_entry.bind("<Return>", focus_next)  # Bind Enter key
 
 # 랭크 field
-tk.Label(root, font=("Helvetica", 20), text="랭크:").place(x=129, y=400)
+tk.Label(root, font=("Helvetica", 20), text="랭크:").place(x=118, y=400)
 rank_label_var = tk.StringVar()
 rank_label = tk.Label(root, width=15, font=("Helvetica", 20), textvariable=rank_label_var, relief="sunken")
 rank_label.place(x=200, y=400)
