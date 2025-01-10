@@ -37,6 +37,33 @@ def log_data():
             messagebox.showerror("Error", "날짜는 YYYY-MM-DD 형식을 사용해주세요.")
             return
         
+        # 데이터 확인 팝업창 생성
+        worker = worker_entry.get()
+        pn = pn_entry.get()
+        ln = ln_entry.get()
+        rank = rank_label_var.get()  # Get rank value
+        qty = int(qty_entry.get())  # Convert QTY to integer
+
+        confirm_message = (
+            f"다음 데이터를 확인해주세요:\n\n"
+            f"작업자: {worker}\n"
+            f"PCB 바코드: {pn}\n"
+            f"제품 바코드: {ln}\n"
+            f"랭크: {rank}\n"
+            f"개수: {qty}\n\n"
+            "입력 내용이 맞습니까?"
+        )
+
+        # "예"와 "아니오" 버튼 추가
+        confirm = messagebox.askyesno("확인", confirm_message)
+        if not confirm:  # 사용자가 "아니오"를 누른 경우 필드 초기화
+            worker_entry.delete(0, tk.END)
+            pn_entry.delete(0, tk.END)
+            ln_entry.delete(0, tk.END)
+            rank_label_var.set("")  # 랭크 초기화
+            qty_entry.delete(0, tk.END)
+            return
+        
         # MySQL 연결 시작 시간 기록
         start_time = time.time()
 
@@ -49,15 +76,10 @@ def log_data():
         )
         cursor = db_connection.cursor()
 
-        # Get data from input fields and input time
-        worker = worker_entry.get()
+        # Get additional inputs
         solder_lot = solder_lot_entry.get()
         material = material_entry.get()
         input_date = date_entry.get()  # Get the date input as string
-        pn = pn_entry.get()
-        ln = ln_entry.get()
-        rank = rank_label_var.get()  # Get rank value
-        qty = int(qty_entry.get())  # Convert QTY to integer
         input_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         # Insert data into MySQL table
