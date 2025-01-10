@@ -86,6 +86,7 @@ def log_data():
         worker_entry.delete(0, tk.END)
         pn_entry.delete(0, tk.END)
         ln_entry.delete(0, tk.END)
+        rank_label_var.set("")
         qty_entry.delete(0, tk.END)
 
         # Focus the P/N entry box for the next input
