@@ -45,7 +45,7 @@ def log_data():
         qty = int(qty_entry.get())  # Convert QTY to integer
 
         confirm_message = (
-            f"다음 데이터를 확인해주세요:\n\n"
+            f"다음 데이터를 확인해주세요.\n\n"
             f"작업자: {worker}\n"
             f"PCB 바코드: {pn}\n"
             f"제품 바코드: {ln}\n"
