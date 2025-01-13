@@ -3,7 +3,6 @@ from tkinter import messagebox
 from datetime import datetime
 import mysql.connector
 import config # config.py 파일 임포트
-import time
 
 # Function to update the rank field based on PCB barcode input
 def update_rank(event=None):
@@ -63,9 +62,6 @@ def log_data():
             rank_label_var.set("")  # 랭크 초기화
             qty_entry.delete(0, tk.END)
             return
-        
-        # MySQL 연결 시작 시간 기록
-        start_time = time.time()
 
         # Use values from the config.py file for MySQL connection
         db_connection = mysql.connector.connect(
@@ -90,17 +86,9 @@ def log_data():
         cursor.execute(insert_query, (solder_lot, material, input_date, worker, pn, ln, rank, qty))
         db_connection.commit()  # Commit the transaction
 
-        # 데이터 저장 완료 시간 기록
-        end_time = time.time()
-
-        # 데이터 저장 소요 시간 계산
-        elapsed_time = end_time - start_time
-
         # Update the log box with the new entry
         log_box.insert(tk.END, f"입/출고: {solder_lot}\n자재 종류: {material}\n날짜: {input_date}\n작업자: {worker}\nPCB 바코드: {pn}\n제품 바코드: {ln}\n개수: {qty}\n입력 시간: {input_time}\n\n")
         log_box.yview(tk.END)  # Scroll to the end of the log box
-
-        messagebox.showinfo("Success", f"Data logged successfully! (소요 시간: {elapsed_time:.4f}초)")
 
         messagebox.showinfo("Success", "데이터 입력 성공")
 
